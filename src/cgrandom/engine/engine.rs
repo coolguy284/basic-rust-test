@@ -3,7 +3,7 @@ pub trait RngEngine {
   
   fn new() -> Self;
   
-  fn seed(&self, seed_num: Self::RngIntType);
+  fn seed(&mut self, seed_num: Self::RngIntType);
   
-  fn generate(&self) -> Self::RngIntType;
+  fn generate(&mut self) -> Self::RngIntType;
 }

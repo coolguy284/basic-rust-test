@@ -46,6 +46,7 @@ dependencies = [
  "chrono",
  "chrono-tz",
  "iana-time-zone",
+ "num-traits",
 ]
 
 [[package]]

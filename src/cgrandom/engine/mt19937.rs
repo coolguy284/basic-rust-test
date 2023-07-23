@@ -1,20 +1,98 @@
+use std::mem::size_of;
+use std::num::Wrapping;
+use std::ops::{BitAnd, Shl, Sub};
+
+use num_traits::One;
+
 use crate::cgrandom::engine::engine::RngEngine;
 
-pub struct Mt19937_32;
+fn lowest_n_bits_of<T: Shl<usize> + BitAnd<<<T as Shl<usize>>::Output as Sub<T>>::Output, Output = T> + One>(num: T, n_bits: usize) -> T where <T as Shl<usize>>::Output: Sub<T> {
+  if n_bits >= (size_of::<T>() * 8usize) {
+    num
+  } else {
+    num & (T::one() << n_bits) - T::one()
+  }
+}
+
+const MT19937_32_W: Wrapping<u32> = Wrapping(32u32);
+const MT19937_32_N: Wrapping<u32> = Wrapping(624u32);
+const MT19937_32_M: Wrapping<u32> = Wrapping(397u32);
+const MT19937_32_R: Wrapping<u32> = Wrapping(31u32);
+const MT19937_32_A: Wrapping<u32> = Wrapping(0x9908b0dfu32);
+const MT19937_32_U: Wrapping<u32> = Wrapping(11u32);
+const MT19937_32_D: Wrapping<u32> = Wrapping(0xffffffffu32);
+const MT19937_32_S: Wrapping<u32> = Wrapping(7u32);
+const MT19937_32_B: Wrapping<u32> = Wrapping(0x9d2c5680u32);
+const MT19937_32_T: Wrapping<u32> = Wrapping(15u32);
+const MT19937_32_C: Wrapping<u32> = Wrapping(0xefc60000u32);
+const MT19937_32_L: Wrapping<u32> = Wrapping(18u32);
+const MT19937_32_F: Wrapping<u32> = Wrapping(1812433253u32);
+
+const MT19937_32_LOWER_MASK: Wrapping<u32> = Wrapping((1u32 << MT19937_32_R.0 as usize) - 1u32);
+const MT19937_32_UPPER_MASK: Wrapping<u32> = Wrapping(!MT19937_32_LOWER_MASK.0); // const version of: lowest_n_bits_of::<u32>(!MT19937_32_LOWER_MASK, MT19937_32_W as usize);
+
+pub struct Mt19937_32 {
+  pub mt_state: [Wrapping<u32>; MT19937_32_N.0 as usize],
+  pub mt_index: Wrapping<u32>,
+}
 
 impl RngEngine for Mt19937_32 {
   type RngIntType = u32;
   
   fn new() -> Mt19937_32 {
-    Mt19937_32
+    Mt19937_32 {
+      mt_state: [Wrapping(0u32); MT19937_32_N.0 as usize],
+      mt_index: MT19937_32_N + Wrapping(1u32),
+    }
   }
   
-  fn seed(&self, seed_num: Self::RngIntType) {
+  // https://en.wikipedia.org/wiki/Mersenne_Twister
+  fn seed(&mut self, seed_num: Self::RngIntType) {
+    self.mt_index = MT19937_32_N;
+    self.mt_state[0] = Wrapping(seed_num);
+    for i in 1u32..MT19937_32_N.0 {
+      let wrapping_i = Wrapping(i);
+      self.mt_state[i as usize] = Wrapping(lowest_n_bits_of::<u32>((MT19937_32_F * (self.mt_state[(i - 1u32) as usize] ^ (self.mt_state[(i - 1u32) as usize] >> (MT19937_32_W.0 - 2u32) as usize)) + wrapping_i).0, MT19937_32_W.0 as usize));
+    }
+  }
+  
+  // https://en.wikipedia.org/wiki/Mersenne_Twister
+  fn generate(&mut self) -> Self::RngIntType {
+    if self.mt_index >= MT19937_32_N {
+      if self.mt_index > MT19937_32_N {
+        //panic!("Generator not seeded");
+        // silently seed with 5489
+        self.seed(5489u32);
+      }
+      self.twist();
+    }
     
+    let mut y = self.mt_state[self.mt_index.0 as usize];
+    y = y ^ ((y >> MT19937_32_U.0 as usize) & MT19937_32_D);
+    y = y ^ ((y << MT19937_32_S.0 as usize) & MT19937_32_B);
+    y = y ^ ((y << MT19937_32_T.0 as usize) & MT19937_32_C);
+    y = y ^ (y >> MT19937_32_L.0 as usize);
+    
+    self.mt_index += 1u32;
+    
+    return lowest_n_bits_of::<u32>(y.0, MT19937_32_W.0 as usize);
   }
-  
-  fn generate(&self) -> Self::RngIntType {
-    4
+}
+
+impl Mt19937_32 {
+  // https://en.wikipedia.org/wiki/Mersenne_Twister
+  fn twist(&mut self) {
+    for i in 0u32..MT19937_32_N.0 {
+      let wrapping_i = Wrapping(i);
+      let x = (self.mt_state[i as usize] & MT19937_32_UPPER_MASK)
+                | (self.mt_state[((wrapping_i + Wrapping(1u32)) % MT19937_32_N).0 as usize] & MT19937_32_LOWER_MASK);
+      let mut x_a = x >> 1usize;
+      if (x % Wrapping(2u32)) != Wrapping(0u32) {
+        x_a = x_a ^ MT19937_32_A;
+      }
+      self.mt_state[i as usize] = self.mt_state[((wrapping_i + MT19937_32_M) % MT19937_32_N).0 as usize] ^ x_a;
+    }
+    self.mt_index = Wrapping(0u32);
   }
 }
 
@@ -27,11 +105,12 @@ impl RngEngine for Mt19937_64 {
     Mt19937_64
   }
   
-  fn seed(&self, seed_num: Self::RngIntType) {
+  // TODO undo the underscore when its time to implement this
+  fn seed(&mut self, _seed_num: Self::RngIntType) {
     
   }
   
-  fn generate(&self) -> Self::RngIntType {
+  fn generate(&mut self) -> Self::RngIntType {
     4
   }
 }

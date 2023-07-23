@@ -1,6 +1,8 @@
 mod cgrandom;
 #[cfg(debug_assertions)]
 mod debug_funcs;
+#[cfg(test)]
+mod tests;
 
 use std::env;
 
@@ -121,7 +123,7 @@ fn main() {
               println!("Seed: {}", rng_seed);
               println!();
               
-              let rng = Mt19937_32::new();
+              let mut rng = Mt19937_32::new();
               
               rng.seed(rng_seed);
               
@@ -150,7 +152,7 @@ fn main() {
               println!("Seed: {}", rng_seed);
               println!();
               
-              let rng = Mt19937_64::new();
+              let mut rng = Mt19937_64::new();
               
               rng.seed(rng_seed);
               
