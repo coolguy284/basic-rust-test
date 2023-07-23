@@ -27,6 +27,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "argmap"
+version = "1.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c007f456524f3f1e06e8929963425b5dadf8616d9110ea0809840c16997994e9"
+
+[[package]]
 name = "autocfg"
 version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -34,8 +40,9 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "basic-rust-test"
-version = "0.2.0"
+version = "0.3.0"
 dependencies = [
+ "argmap",
  "chrono",
  "chrono-tz",
  "iana-time-zone",
