@@ -1,7 +1,14 @@
+#[cfg(debug_assertions)]
+mod debug_funcs;
+
 use std::env;
+
 use chrono::{DateTime, Local, Offset, TimeZone, Utc};
 use chrono_tz::{OffsetName, Tz};
 use iana_time_zone::get_timezone;
+
+#[cfg(debug_assertions)]
+use debug_funcs::print_type_of;
 
 fn main() {
   let cmd_line_args: Vec<String> = env::args().collect();
@@ -26,15 +33,26 @@ fn main() {
         let now_local: DateTime<Local> = DateTime::from(now_utc);
         
         // i don't even know bro https://stackoverflow.com/questions/59603665/how-do-you-find-the-local-timezone-offset-in-rust/59603899#59603899
-        let local_offset_secs = Local.timestamp_opt(0, 0).single().unwrap().offset().fix().local_minus_utc();
+        let local_pre_fixed_offset = Local.timestamp_opt(0, 0).single().unwrap();
+        let local_fixed_offset = local_pre_fixed_offset.offset();
+        let local_offset_secs = local_fixed_offset.fix().local_minus_utc();
         
         let local_offset_secs_is_positive = local_offset_secs >= 0;
         let local_offset_secs_absolute = local_offset_secs.abs();
         
         let local_tz_str = get_timezone().unwrap();
         let local_tz: Tz = local_tz_str.parse().unwrap();
-        let local_offset = local_tz.offset_from_utc_date(&now_utc.date_naive());
-        let local_tz_abbreviation = local_offset.abbreviation();
+        let local_utc_offset = local_tz.offset_from_utc_date(&now_utc.date_naive());
+        let local_tz_abbreviation = local_utc_offset.abbreviation();
+        
+        #[cfg(debug_assertions)]
+        {
+          // TODO somewhen: reconcile these 2 inexplicably different types
+          println!("Types of the 2 inexplicably different offset variables:");
+          print_type_of(&local_fixed_offset);
+          print_type_of(&local_utc_offset);
+          println!();
+        }
         
         println!("Current time, written in many ways:");
         println!();
