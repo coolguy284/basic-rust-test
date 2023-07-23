@@ -1,10 +1,25 @@
 [package]
-name = "basic-rust-test"
-version = "0.1.0"
-edition = "2021"
+name = 'basic-rust-test'
+version = '0.2.0'
+edition = '2021'
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-chrono = "0.4.26"
-iana-time-zone = "0.1.57"
+chrono = '0.4.26'
+iana-time-zone = '0.1.57'
+
+[profile.release]
+opt-level = 3
+lto = true           # use link time optimization
+codegen-units = 1    # singlethreaded allows for more optimizations
+#panic = 'abort'     # do not make stacktrace on panic
+#strip = true        # strip symbols from binary on mac or linux
+
+[profile.release-minsize]
+inherits = 'release'
+opt-level = 'z'      # optimize for size only, and skip vectorization ('s' for allowing vectorization)
+lto = true           # use link time optimization
+codegen-units = 1    # singlethreaded allows for more optimizations
+panic = 'abort'      # do not make stacktrace on panic
+strip = true         # strip symbols from binary on mac or linux
