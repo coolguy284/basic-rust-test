@@ -9,7 +9,9 @@ use std::env;
 use chrono::{DateTime, Local, Offset, TimeZone, Utc};
 use chrono_tz::{OffsetName, Tz};
 use iana_time_zone::get_timezone;
+use hex::{FromHex, ToHex};
 
+use cgrandom::engine::cgcsprng1::CgCsPrng1;
 use cgrandom::engine::engine::RngEngine;
 use cgrandom::engine::mt19937::{Mt19937_32, Mt19937_64};
 #[cfg(debug_assertions)]
@@ -80,7 +82,7 @@ fn main() {
           println!();
           println!("OPTIONS:");
           println!("    --rng=<NAME>       The name of the RNG to use.");
-          println!("        Valid RNGs: mt19937_32, mt19937_64");
+          println!("        Valid RNGs: mt19937_32, mt19937_64, cgcsprng1");
           println!("    --seed-hex=<SEED>  The seed for the RNG, in hex.");
           println!("    --skip=<COUNT>     The number of initial outputs of the RNG to skip, in decimal.");
           println!("    --count=<COUNT>    The number of outputs of the RNG to display, in decimal.");
@@ -170,6 +172,57 @@ fn main() {
               for _ in 0..rng_count {
                 let result = rng.generate();
                 println!("{}", result);
+              }
+            },
+            "cgcsprng1" => {
+              println!("Random Number Generator: {}", rng_name);
+              println!();
+              
+              if rng_seed_hex_string.len() != 128 {
+                panic!("--seed-hex length of {} is invalid, must be 128 chars", rng_seed_hex_string.len());
+              }
+              
+              let rng_seed = <[u8; 64]>::from_hex(rng_seed_hex_string).expect("--seed-hex is invalid hex");
+              
+              println!("Seed: {}", rng_seed.encode_hex::<String>());
+              println!();
+              
+              let rng_modifier_hex_string_option = rng_argv.get("modifier-hex").and_then(|v| v.last());
+              
+              let rng_modifier;
+              match rng_modifier_hex_string_option {
+                Some(x) => {
+                  if x.len() != 128 {
+                    panic!("--modifier-hex length of {} is invalid, must be 128 chars", x.len());
+                  }
+                  
+                  rng_modifier = <[u8; 64]>::from_hex(x).expect("--modifier-hex is invalid hex");
+                },
+                None => {
+                  rng_modifier = [0u8; 64];
+                },
+              }
+              
+              println!("Modifier: {}", rng_modifier.encode_hex::<String>());
+              println!();
+              
+              let mut rng = CgCsPrng1::new();
+              
+              rng.seed(rng_seed);
+              rng.set_modifier(rng_modifier);
+              
+              // skip some outputs
+              if rng_skip_count > 0 {
+                println!("Skipping {} outputs", rng_skip_count);
+                println!();
+                rng.skip(rng_skip_count as u128);
+              }
+              
+              // output some outputs
+              println!("Outputs ({}):", rng_count);
+              for _ in 0..rng_count {
+                let result = rng.generate();
+                println!("{}", result.encode_hex::<String>());
               }
             },
             _ => {

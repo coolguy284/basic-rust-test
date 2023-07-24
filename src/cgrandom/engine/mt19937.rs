@@ -47,9 +47,9 @@ impl RngEngine for Mt19937_32 {
   }
   
   // https://en.wikipedia.org/wiki/Mersenne_Twister
-  fn seed(&mut self, seed_num: Self::RngIntType) {
+  fn seed(&mut self, seed_val: Self::RngIntType) {
     self.mt_index = MT19937_32_N;
-    self.mt_state[0] = Wrapping(seed_num);
+    self.mt_state[0] = Wrapping(seed_val);
     for i in 1u32..MT19937_32_N.0 {
       let wrapping_i = Wrapping(i);
       self.mt_state[i as usize] = Wrapping(lowest_n_bits_of::<u32>((MT19937_32_F * (self.mt_state[(i - 1u32) as usize] ^ (self.mt_state[(i - 1u32) as usize] >> (MT19937_32_W.0 - 2u32) as usize)) + wrapping_i).0, MT19937_32_W.0 as usize));
@@ -129,9 +129,9 @@ impl RngEngine for Mt19937_64 {
   }
   
   // https://en.wikipedia.org/wiki/Mersenne_Twister
-  fn seed(&mut self, seed_num: Self::RngIntType) {
+  fn seed(&mut self, seed_val: Self::RngIntType) {
     self.mt_index = MT19937_64_N;
-    self.mt_state[0] = Wrapping(seed_num);
+    self.mt_state[0] = Wrapping(seed_val);
     for i in 1u64..MT19937_64_N.0 {
       let wrapping_i = Wrapping(i);
       self.mt_state[i as usize] = Wrapping(lowest_n_bits_of::<u64>((MT19937_64_F * (self.mt_state[(i - 1u64) as usize] ^ (self.mt_state[(i - 1u64) as usize] >> (MT19937_64_W.0 - 2u64) as usize)) + wrapping_i).0, MT19937_64_W.0 as usize));

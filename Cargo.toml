@@ -9,6 +9,8 @@ edition = '2021'
 argmap = '1.1.2'
 chrono = '0.4.26'
 chrono-tz = '0.8.3'
+hex = '0.4.3'
+rust-crypto = '0.2.36'
 iana-time-zone = '0.1.57'
 num-traits = '0.2.16'
 
