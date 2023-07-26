@@ -1,0 +1,2 @@
+low priority:
+remove rust-crypto depenency, replace with crypto or sha3
