@@ -1,7 +1,7 @@
 use crypto::digest::Digest;
 use crypto::sha3::Sha3;
 
-use crate::cgrandom::engine::engine::RngEngine;
+use crate::cgrandom::engine::engine::{RngEngine, RngSkippable};
 
 pub struct CgCsPrng1 {
   pub seed: [u8; 64],
@@ -45,6 +45,14 @@ impl RngEngine for CgCsPrng1 {
     self.increase_counter(1u128);
     
     hash_result
+  }
+}
+
+impl RngSkippable for CgCsPrng1 {
+  type RngSkipType = u128;
+  
+  fn skip(&mut self, count: Self::RngSkipType) {
+    self.increase_counter(count);
   }
 }
 
@@ -108,9 +116,5 @@ impl CgCsPrng1 {
     
     let (pos0_res, _pos0_carry) = self.counter[0].overflowing_sub(1u128);
     self.counter[0] = pos0_res;
-  }
-  
-  pub fn skip(&mut self, count: u128) {
-    self.increase_counter(count);
   }
 }

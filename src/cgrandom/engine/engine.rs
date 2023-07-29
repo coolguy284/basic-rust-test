@@ -7,3 +7,9 @@ pub trait RngEngine {
   
   fn generate(&mut self) -> Self::RngOutputType;
 }
+
+pub trait RngSkippable: RngEngine {
+  type RngSkipType;
+  
+  fn skip(&mut self, count: Self::RngSkipType);
+}
