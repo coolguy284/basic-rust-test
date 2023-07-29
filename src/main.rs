@@ -14,6 +14,7 @@ use hex::{FromHex, ToHex};
 use cgrandom::engines::cgcsprng1::CgCsPrng1;
 use cgrandom::engines::engine::{RngEngine, RngSkippable};
 use cgrandom::engines::mt19937::{Mt19937_32, Mt19937_64};
+use cgrandom::engines::non_random::{CounterGenerator8, FourGenerator8};
 #[cfg(debug_assertions)]
 use debug_funcs::print_type_of;
 
@@ -83,6 +84,7 @@ fn main() {
           println!("OPTIONS:");
           println!("    --rng=<NAME>       The name of the RNG to use.");
           println!("        Valid RNGs:");
+          println!("          Non random:    fourgenerator, countergenerator");
           println!("          PRNGs:         mt19937_32, mt19937_64");
           println!("          CSPRNGs:       cgcsprng1 (untested)");
           println!("    --seed-hex=<SEED>  The seed for the RNG, in hex.");
@@ -118,6 +120,47 @@ fn main() {
           }
           
           match rng_name.as_str() {
+            "fourgenerator" => {
+              println!("Random Number Generator: {}", rng_name);
+              println!();
+              
+              let mut rng = FourGenerator8::new();
+              
+              // output some outputs
+              println!("Outputs ({}):", rng_count);
+              for _ in 0..rng_count {
+                let result = rng.generate();
+                println!("{}", result);
+              }
+            },
+            "countergenerator" => {
+              println!("Random Number Generator: {}", rng_name);
+              println!();
+              
+              let rng_seed = u8::from_str_radix(rng_seed_hex_string, 16).expect("--seed-hex not a valid hex value");
+              
+              println!("Seed: {}", rng_seed);
+              println!();
+              
+              let mut rng = CounterGenerator8::new();
+              
+              rng.seed(rng_seed);
+              
+              // skip some outputs
+              if rng_skip_count > 0 {
+                println!("Skipping {} outputs", rng_skip_count);
+                println!();
+                
+                rng.skip((rng_skip_count % 256u64) as u8);
+              }
+              
+              // output some outputs
+              println!("Outputs ({}):", rng_count);
+              for _ in 0..rng_count {
+                let result = rng.generate();
+                println!("{}", result);
+              }
+            },
             "mt19937_32" => {
               println!("Random Number Generator: {}", rng_name);
               println!();

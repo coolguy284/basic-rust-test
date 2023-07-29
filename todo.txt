@@ -1,2 +1,3 @@
 low priority:
+reconcile the 2 inexplicably different types in the current_time subcommand
 remove rust-crypto depenency, replace with crypto or sha3
