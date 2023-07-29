@@ -90,11 +90,11 @@ fn main() {
           println!("DISCUSSION:");
           println!("    A command to print the output of a given RNG with a given seed. This should result in the same outputs every time on every platform, as long as a deterministic RNG is chosen.");
         } else {
-          let (_rng_args, rng_argv) = argmap::parse(cmd_line_args.iter().skip(1).collect::<Vec<_>>().iter());
+          let (_subcommand_args, subcommand_argv) = argmap::parse(cmd_line_args.iter().skip(1).collect::<Vec<_>>().iter());
           
-          let rng_name = rng_argv.get("rng").and_then(|v| v.last()).expect("--rng not specified");
-          let rng_seed_hex_string = rng_argv.get("seed-hex").and_then(|v| v.last()).expect("--seed-hex not specified");
-          let rng_skip_count_str_option = rng_argv.get("skip").and_then(|v| v.last());
+          let rng_name = subcommand_argv.get("rng").and_then(|v| v.last()).expect("--rng not specified");
+          let rng_seed_hex_string = subcommand_argv.get("seed-hex").and_then(|v| v.last()).expect("--seed-hex not specified");
+          let rng_skip_count_str_option = subcommand_argv.get("skip").and_then(|v| v.last());
           let rng_skip_count;
           match rng_skip_count_str_option {
             Some(x) => {
@@ -104,7 +104,7 @@ fn main() {
               rng_skip_count = 0;
             },
           }
-          let rng_count_str_option = rng_argv.get("count").and_then(|v| v.last());
+          let rng_count_str_option = subcommand_argv.get("count").and_then(|v| v.last());
           let rng_count;
           match rng_count_str_option {
             Some(x) => {
@@ -187,7 +187,7 @@ fn main() {
               println!("Seed: {}", rng_seed.encode_hex::<String>());
               println!();
               
-              let rng_modifier_hex_string_option = rng_argv.get("modifier-hex").and_then(|v| v.last());
+              let rng_modifier_hex_string_option = subcommand_argv.get("modifier-hex").and_then(|v| v.last());
               
               let rng_modifier;
               match rng_modifier_hex_string_option {
