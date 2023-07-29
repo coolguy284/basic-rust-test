@@ -1,9 +1,9 @@
 pub trait RngEngine {
-  type RngIntType;
+  type RngOutputType;
   
   fn new() -> Self;
   
-  fn seed(&mut self, seed_val: Self::RngIntType);
+  fn seed(&mut self, seed_val: Self::RngOutputType);
   
-  fn generate(&mut self) -> Self::RngIntType;
+  fn generate(&mut self) -> Self::RngOutputType;
 }

@@ -10,7 +10,7 @@ pub struct CgCsPrng1 {
 }
 
 impl RngEngine for CgCsPrng1 {
-  type RngIntType = [u8; 64];
+  type RngOutputType = [u8; 64];
   
   fn new() -> CgCsPrng1 {
     CgCsPrng1 {
@@ -20,11 +20,11 @@ impl RngEngine for CgCsPrng1 {
     }
   }
   
-  fn seed(&mut self, seed_val: Self::RngIntType) {
+  fn seed(&mut self, seed_val: Self::RngOutputType) {
     self.seed.clone_from_slice(&seed_val[..]);
   }
   
-  fn generate(&mut self) -> Self::RngIntType {
+  fn generate(&mut self) -> Self::RngOutputType {
     let mut hasher = Sha3::sha3_512();
     
     let mut hash_input = [0u8; 192];
@@ -71,7 +71,7 @@ impl CgCsPrng1 {
     output[15] = (input & 0xffu128) as u8;
   }
   
-  pub fn set_modifier(&mut self, modifier: <CgCsPrng1 as RngEngine>::RngIntType) {
+  pub fn set_modifier(&mut self, modifier: <CgCsPrng1 as RngEngine>::RngOutputType) {
     self.modifier.clone_from_slice(&modifier[..]);
   }
   

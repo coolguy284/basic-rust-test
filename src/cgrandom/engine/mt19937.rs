@@ -37,7 +37,7 @@ pub struct Mt19937_32 {
 }
 
 impl RngEngine for Mt19937_32 {
-  type RngIntType = u32;
+  type RngOutputType = u32;
   
   fn new() -> Mt19937_32 {
     Mt19937_32 {
@@ -47,7 +47,7 @@ impl RngEngine for Mt19937_32 {
   }
   
   // https://en.wikipedia.org/wiki/Mersenne_Twister
-  fn seed(&mut self, seed_val: Self::RngIntType) {
+  fn seed(&mut self, seed_val: Self::RngOutputType) {
     self.mt_index = MT19937_32_N;
     self.mt_state[0] = Wrapping(seed_val);
     for i in 1u32..MT19937_32_N.0 {
@@ -57,7 +57,7 @@ impl RngEngine for Mt19937_32 {
   }
   
   // https://en.wikipedia.org/wiki/Mersenne_Twister
-  fn generate(&mut self) -> Self::RngIntType {
+  fn generate(&mut self) -> Self::RngOutputType {
     if self.mt_index >= MT19937_32_N {
       if self.mt_index > MT19937_32_N {
         //panic!("Generator not seeded");
@@ -119,7 +119,7 @@ pub struct Mt19937_64 {
 }
 
 impl RngEngine for Mt19937_64 {
-  type RngIntType = u64;
+  type RngOutputType = u64;
   
   fn new() -> Mt19937_64 {
     Mt19937_64 {
@@ -129,7 +129,7 @@ impl RngEngine for Mt19937_64 {
   }
   
   // https://en.wikipedia.org/wiki/Mersenne_Twister
-  fn seed(&mut self, seed_val: Self::RngIntType) {
+  fn seed(&mut self, seed_val: Self::RngOutputType) {
     self.mt_index = MT19937_64_N;
     self.mt_state[0] = Wrapping(seed_val);
     for i in 1u64..MT19937_64_N.0 {
@@ -139,7 +139,7 @@ impl RngEngine for Mt19937_64 {
   }
   
   // https://en.wikipedia.org/wiki/Mersenne_Twister
-  fn generate(&mut self) -> Self::RngIntType {
+  fn generate(&mut self) -> Self::RngOutputType {
     if self.mt_index >= MT19937_64_N {
       if self.mt_index > MT19937_64_N {
         //panic!("Generator not seeded");
