@@ -11,9 +11,9 @@ use chrono_tz::{OffsetName, Tz};
 use iana_time_zone::get_timezone;
 use hex::{FromHex, ToHex};
 
-use cgrandom::engine::cgcsprng1::CgCsPrng1;
-use cgrandom::engine::engine::{RngEngine, RngSkippable};
-use cgrandom::engine::mt19937::{Mt19937_32, Mt19937_64};
+use cgrandom::engines::cgcsprng1::CgCsPrng1;
+use cgrandom::engines::engine::{RngEngine, RngSkippable};
+use cgrandom::engines::mt19937::{Mt19937_32, Mt19937_64};
 #[cfg(debug_assertions)]
 use debug_funcs::print_type_of;
 

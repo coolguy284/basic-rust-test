@@ -4,7 +4,7 @@ use std::ops::{BitAnd, Shl, Sub};
 
 use num_traits::One;
 
-use crate::cgrandom::engine::engine::RngEngine;
+use crate::cgrandom::engines::engine::RngEngine;
 
 fn lowest_n_bits_of<T: Shl<usize> + BitAnd<<<T as Shl<usize>>::Output as Sub<T>>::Output, Output = T> + One>(num: T, n_bits: usize) -> T where <T as Shl<usize>>::Output: Sub<T> {
   if n_bits >= (size_of::<T>() * 8usize) {
