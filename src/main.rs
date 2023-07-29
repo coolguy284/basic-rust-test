@@ -82,7 +82,9 @@ fn main() {
           println!();
           println!("OPTIONS:");
           println!("    --rng=<NAME>       The name of the RNG to use.");
-          println!("        Valid RNGs: mt19937_32, mt19937_64, cgcsprng1");
+          println!("        Valid RNGs:");
+          println!("          PRNGs:         mt19937_32, mt19937_64");
+          println!("          CSPRNGs:       cgcsprng1 (untested)");
           println!("    --seed-hex=<SEED>  The seed for the RNG, in hex.");
           println!("    --skip=<COUNT>     The number of initial outputs of the RNG to skip, in decimal.");
           println!("    --count=<COUNT>    The number of outputs of the RNG to display, in decimal.");
