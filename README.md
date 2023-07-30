@@ -7,7 +7,7 @@ This is a test Rust program I made to learn how Rust works while implementing a 
 To run a command, type `basic-rust-test <COMMAND> [OPTIONS]`.
 
 1. `current_time`: Prints the current time.
-2. `rng_simple`: Prints the output of a given RNG with a given seed.
+2. `rng_simple`: Prints the output of a given RNG with a given seed. Options for the RNG are `mt19937_32`, `mt19937_64`, and some others.
 3. `sleep`: Sleeps for a given amount of time, then quits.
 
 ## Building
