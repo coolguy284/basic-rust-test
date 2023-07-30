@@ -3,6 +3,7 @@ mod cgrandom;
 mod debug_funcs;
 #[cfg(test)]
 mod tests;
+mod time_lib;
 
 use std::env;
 
@@ -17,6 +18,8 @@ use cgrandom::engines::mt19937::{Mt19937_32, Mt19937_64};
 use cgrandom::engines::non_random::{CounterGenerator8, FourGenerator8};
 #[cfg(debug_assertions)]
 use debug_funcs::print_type_of;
+use time_lib::{advanced_sleep, FixedPrec};
+use time_lib::FixedPrec::{FPInfinite, FPNumber};
 
 fn main() {
   let cmd_line_args: Vec<String> = env::args().skip(1).collect();
@@ -27,9 +30,13 @@ fn main() {
     println!("USAGE:");
     println!("    basic-rust-test <SUBCOMMAND>");
     println!();
-    println!("SUBCOMMANDS:");
+    println!("SUBCOMMANDS (PRIMARY):");
     println!("    current_time");
     println!("    rng_simple");
+    println!("    sleep");
+    println!();
+    println!("SUBCOMMANDS (DEBUGGING):");
+    println!("    fixed_prec_parse_test");
     println!();
     println!("DISCUSSION:");
     println!("    Just a collection of random commands to do random things in rust.");
@@ -276,8 +283,189 @@ fn main() {
           }
         }
       },
+      "sleep" => {
+        if cmd_line_args.len() == 1 {
+          println!("Coolguy284's basic rust experimentation program, sleep module.");
+          println!();
+          println!("USAGE:");
+          println!("    basic-rust-test sleep [SECONDS] [OPTIONS]");
+          println!();
+          println!("OPTIONS:");
+          println!("    [SECONDS]                     Time in seconds to sleep as an integer or a decimal.");
+          println!("    --time-seconds=<SECONDS>      Time in seconds to sleep as an integer or a decimal.");
+          println!("    --time-milliseconds=<MILLIS>  Time in milliseconds to sleep as an integer or a decimal.");
+          println!("    --time-microseconds=<MICROS>  Time in microseconds to sleep as an integer or a decimal.");
+          println!("    --time-nanoseconds=<NANOS>    Time in nanoseconds to sleep as an integer.");
+          println!();
+          println!("DISCUSSION:");
+          println!("    A command to sleep a certain length of time. If a normal argument is given the first argument has precedence, if not the first one from the list above has precedence.");
+        } else {
+          let (subcommand_args, subcommand_argv) = argmap::parse(cmd_line_args.iter().skip(1).collect::<Vec<_>>().iter());
+          
+          if subcommand_args.len() >= 1 {
+            let sleep_seconds = FixedPrec::from_str(&subcommand_args[0], 9);
+            println!("Sleeping for {} seconds...", sleep_seconds.to_string());
+            advanced_sleep(sleep_seconds);
+            return;
+          }
+          
+          let sleep_seconds_option = subcommand_argv.get("time-seconds").and_then(|v| v.last());
+          match sleep_seconds_option {
+            Some(x) => {
+              let sleep_seconds = FixedPrec::from_str(x, 9);
+              println!("Sleeping for {} seconds...", sleep_seconds.to_string());
+              advanced_sleep(sleep_seconds);
+              return;
+            },
+            None => {},
+          }
+          
+          let sleep_milliseconds_option = subcommand_argv.get("time-milliseconds").and_then(|v| v.last());
+          match sleep_milliseconds_option {
+            Some(x) => {
+              let sleep_milliseconds = FixedPrec::from_str(x, 6);
+              let sleep_seconds = match sleep_milliseconds {
+                FPNumber { integer_part, fractional_part, .. } => FPNumber {
+                  negative: false,
+                  integer_part: integer_part / 1000u128,
+                  fractional_part: (integer_part % 1000u128) as u32 * 1000000u32 + fractional_part,
+                  fractional_digits: 9,
+                },
+                FPInfinite { negative, fractional_digits } => FPInfinite {
+                  negative,
+                  fractional_digits,
+                },
+              };
+              println!("Sleeping for {} seconds...", sleep_seconds.to_string());
+              advanced_sleep(sleep_seconds);
+              return;
+            },
+            None => {},
+          }
+          
+          let sleep_microseconds_option = subcommand_argv.get("time-microseconds").and_then(|v| v.last());
+          match sleep_microseconds_option {
+            Some(x) => {
+              let sleep_microseconds = FixedPrec::from_str(x, 3);
+              let sleep_seconds = match sleep_microseconds {
+                FPNumber { integer_part, fractional_part, .. } => FPNumber {
+                  negative: false,
+                  integer_part: integer_part / 1000000u128,
+                  fractional_part: (integer_part % 1000000u128) as u32 * 1000u32 + fractional_part,
+                  fractional_digits: 9,
+                },
+                FPInfinite { negative, fractional_digits } => FPInfinite {
+                  negative,
+                  fractional_digits,
+                },
+              };
+              println!("Sleeping for {} seconds...", sleep_seconds.to_string());
+              advanced_sleep(sleep_seconds);
+              return;
+            },
+            None => {},
+          }
+          
+          let sleep_nanoseconds_option = subcommand_argv.get("time-nanoseconds").and_then(|v| v.last());
+          match sleep_nanoseconds_option {
+            Some(x) => {
+              let sleep_nanoseconds = FixedPrec::from_str(x, 0);
+              let sleep_seconds = match sleep_nanoseconds {
+                FPNumber { integer_part, .. } => FPNumber {
+                  negative: false,
+                  integer_part: integer_part / 1000000000u128,
+                  fractional_part: (integer_part % 1000000000u128) as u32,
+                  fractional_digits: 9,
+                },
+                FPInfinite { negative, fractional_digits } => FPInfinite {
+                  negative,
+                  fractional_digits,
+                },
+              };
+              println!("Sleeping for {} seconds...", sleep_seconds.to_string());
+              advanced_sleep(sleep_seconds);
+              return;
+            },
+            None => {},
+          }
+          
+          println!("Coolguy284's basic rust experimentation program, sleep module.");
+          println!();
+          println!("USAGE:");
+          println!("    basic-rust-test sleep [SECONDS] [OPTIONS]");
+          println!();
+          println!("OPTIONS:");
+          println!("    [SECONDS]                     Time in seconds to sleep as an integer or a decimal.");
+          println!("    --time-seconds=<SECONDS>      Time in seconds to sleep as an integer or a decimal.");
+          println!("    --time-milliseconds=<MILLIS>  Time in milliseconds to sleep as an integer or a decimal.");
+          println!("    --time-microseconds=<MICROS>  Time in microseconds to sleep as an integer or a decimal.");
+          println!("    --time-nanoseconds=<NANOS>    Time in nanoseconds to sleep as an integer.");
+          println!();
+          println!("DISCUSSION:");
+          println!("    A command to sleep a certain length of time. If a normal argument is given the first argument has precedence, if not the first one from the list above has precedence.");
+        }
+      },
+      "fixed_prec_parse_test" => {
+        let (_subcommand_args, subcommand_argv) = argmap::parse(cmd_line_args.iter().skip(1).collect::<Vec<_>>().iter());
+        
+        if cmd_line_args.len() == 1 {
+          println!("Coolguy284's basic rust experimentation program, FixedPrec parse test module.");
+          println!();
+          println!("USAGE:");
+          println!("    basic-rust-test fixed_prec_parse_test <OPTIONS>");
+          println!();
+          println!("OPTIONS:");
+          println!("    --num-str=<VALUE>              The value to convert into a FixedPrec object and then back into a string.");
+          println!("    --fractional-digits=<INTEGER>  The number of digits after the decimal point the FixedPrec object should have.");
+          println!();
+          println!("DISCUSSION:");
+          println!("    A debug command to convert a number into a FixedPrec object and then back into a string, for testing.");
+        } else {
+          let num_str = subcommand_argv.get("num-str").and_then(|v| v.last()).expect("--num-str not present");
+          
+          let fractional_digits_option = subcommand_argv.get("fractional-digits").and_then(|v| v.last());
+          
+          let fractional_digits;
+          match fractional_digits_option {
+            Some(x) => {
+              fractional_digits = x.parse::<u8>().expect("--fractional-digits invalid");
+            },
+            None => {
+              fractional_digits = 9;
+            },
+          }
+          
+          println!("Input numerical string: \"{}\"", num_str);
+          println!();
+          
+          let fixed_prec_object = FixedPrec::from_str(&num_str, fractional_digits);
+          
+          println!("Object:");
+          match fixed_prec_object {
+            FPNumber { negative, integer_part, fractional_part, fractional_digits } => {
+              println!("FixedPrec::FPNumber {{");
+              println!("  negative: {},", negative);
+              println!("  integer_part: {},", integer_part);
+              println!("  fractional_part: {},", fractional_part);
+              println!("  fractional_digits: {},", fractional_digits);
+              println!("}}");
+            },
+            FPInfinite { negative, fractional_digits } => {
+              println!("FixedPrec::FPInfinite {{");
+              println!("  negative: {},", negative);
+              println!("  fractional_digits: {},", fractional_digits);
+              println!("}}");
+            },
+          }
+          println!();
+          
+          let fixed_prec_str = fixed_prec_object.to_string();
+          
+          println!("Converted string: \"{}\"", fixed_prec_str);
+        }
+      },
       _ => {
-        println!("Invalid argument \"{}\" for \"basic-rust-test\". For list of arguments, run \"basic-rust-test\" with no arguments", arg_0);
+        println!("Invalid command \"basic-rust-test {}\". For list of commands, run \"basic-rust-test\" with no arguments.", arg_0);
       },
     }
   }

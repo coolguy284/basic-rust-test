@@ -40,7 +40,7 @@ checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
 
 [[package]]
 name = "basic-rust-test"
-version = "0.5.5"
+version = "0.5.6"
 dependencies = [
  "argmap",
  "chrono",
@@ -49,6 +49,7 @@ dependencies = [
  "iana-time-zone",
  "num-traits",
  "rust-crypto",
+ "substring",
 ]
 
 [[package]]
@@ -375,6 +376,15 @@ name = "siphasher"
 version = "0.3.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7bd3e3206899af3f8b12af284fafc038cc1dc2b41d1b89dd17297221c5d225de"
+
+[[package]]
+name = "substring"
+version = "1.4.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "42ee6433ecef213b2e72f587ef64a2f5943e7cd16fbd82dbe8bc07486c534c86"
+dependencies = [
+ "autocfg",
+]
 
 [[package]]
 name = "syn"

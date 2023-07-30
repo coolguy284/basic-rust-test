@@ -1,6 +1,6 @@
 [package]
 name = 'basic-rust-test'
-version = '0.5.5'
+version = '0.5.6'
 edition = '2021'
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -10,9 +10,10 @@ argmap = '1.1.2'
 chrono = '0.4.26'
 chrono-tz = '0.8.3'
 hex = '0.4.3'
-rust-crypto = '0.2.36'
 iana-time-zone = '0.1.57'
 num-traits = '0.2.16'
+rust-crypto = '0.2.36'
+substring = '1.4.5'
 
 [profile.release]
 opt-level = 3
