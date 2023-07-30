@@ -1,5 +1,4 @@
-use crypto::digest::Digest;
-use crypto::sha3::Sha3;
+use sha3::{Digest, Sha3_512};
 
 use crate::libs::cgrandom::generators::generator::{RngBase, RngSkippable};
 
@@ -25,8 +24,6 @@ impl RngBase for CgCsPrng1 {
   }
   
   fn generate(&mut self) -> Self::RngOutputType {
-    let mut hasher = Sha3::sha3_512();
-    
     let mut hash_input = [0u8; 192];
     
     hash_input[..64].copy_from_slice(&self.seed[..]);
@@ -36,11 +33,7 @@ impl RngBase for CgCsPrng1 {
     CgCsPrng1::copy_u128_to_u8(self.counter[2], &mut hash_input[160..176]);
     CgCsPrng1::copy_u128_to_u8(self.counter[3], &mut hash_input[176..]);
     
-    hasher.input(&hash_input[..]);
-    
-    let mut hash_result = [0u8; 64];
-    
-    hasher.result(&mut hash_result[..]);
+    let hash_result = Sha3_512::digest(&hash_input[..]).into();
     
     self.increase_counter(1u128);
     

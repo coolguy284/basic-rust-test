@@ -10,9 +10,10 @@ argmap = '1.1.2'
 chrono = '0.4.26'
 chrono-tz = '0.8.3'
 hex = '0.4.3'
+hex-literal = '0.4.1'
 iana-time-zone = '0.1.57'
 num-traits = '0.2.16'
-rust-crypto = '0.2.36'
+sha3 = '0.10.8'
 substring = '1.4.5'
 
 [profile.release]
