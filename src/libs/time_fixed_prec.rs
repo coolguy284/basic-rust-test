@@ -3,7 +3,7 @@ use std::time::Duration;
 
 use substring::Substring;
 
-use crate::libs::time_fixed_prec::FixedPrec::{FPInfinite, FPNumber};
+use FixedPrec::{FPInfinite, FPNumber};
 
 #[derive(Debug, PartialEq)]
 pub enum FixedPrec {

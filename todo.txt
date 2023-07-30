@@ -1,5 +1,4 @@
 active items:
-unnecessary self referential FPNumber & FPInfinite in time_fixed_prec?
 move main.rs stuff info subfolders
 remove apparently unnecessary unwraps
 convert compiled in hex calls to hex!
