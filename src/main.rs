@@ -1,9 +1,6 @@
-mod cgrandom;
-#[cfg(debug_assertions)]
-mod debug_funcs;
+mod libs;
 #[cfg(test)]
 mod tests;
-mod time_lib;
 
 use std::env;
 
@@ -12,14 +9,14 @@ use chrono_tz::{OffsetName, Tz};
 use iana_time_zone::get_timezone;
 use hex::{FromHex, ToHex};
 
-use cgrandom::generators::cgcsprng1::CgCsPrng1;
-use cgrandom::generators::generator::{RngBase, RngSkippable};
-use cgrandom::generators::mt19937::{Mt19937_32, Mt19937_64};
-use cgrandom::generators::non_random::{CounterGenerator8, FourGenerator8};
+use libs::cgrandom::generators::cgcsprng1::CgCsPrng1;
+use libs::cgrandom::generators::generator::{RngBase, RngSkippable};
+use libs::cgrandom::generators::mt19937::{Mt19937_32, Mt19937_64};
+use libs::cgrandom::generators::non_random::{CounterGenerator8, FourGenerator8};
 #[cfg(debug_assertions)]
-use debug_funcs::print_type_of;
-use time_lib::{advanced_sleep, FixedPrec};
-use time_lib::FixedPrec::{FPInfinite, FPNumber};
+use libs::debug_funcs::print_type_of;
+use libs::time_fixed_prec::{advanced_sleep, FixedPrec};
+use libs::time_fixed_prec::FixedPrec::{FPInfinite, FPNumber};
 
 fn main() {
   let cmd_line_args: Vec<String> = env::args().skip(1).collect();

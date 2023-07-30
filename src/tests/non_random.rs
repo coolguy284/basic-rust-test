@@ -1,5 +1,5 @@
-use crate::cgrandom::generators::generator::{RngBase, RngSkippable};
-use crate::cgrandom::generators::non_random::{FourGenerator8, CounterGenerator8};
+use crate::libs::cgrandom::generators::generator::{RngBase, RngSkippable};
+use crate::libs::cgrandom::generators::non_random::{FourGenerator8, CounterGenerator8};
 
 // the 1st output of fourgenerator_8 must be 4
 #[test]

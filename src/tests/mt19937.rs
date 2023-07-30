@@ -1,5 +1,5 @@
-use crate::cgrandom::generators::generator::RngBase;
-use crate::cgrandom::generators::mt19937::{Mt19937_32, Mt19937_64};
+use crate::libs::cgrandom::generators::generator::RngBase;
+use crate::libs::cgrandom::generators::mt19937::{Mt19937_32, Mt19937_64};
 
 // the 10000th output of mt19937_32 seeded with 5489 must be 4123659995
 #[test]

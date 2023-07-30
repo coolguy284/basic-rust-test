@@ -1,5 +1,5 @@
-use crate::time_lib::FixedPrec;
-use crate::time_lib::FixedPrec::{FPInfinite, FPNumber};
+use crate::libs::time_fixed_prec::FixedPrec;
+use crate::libs::time_fixed_prec::FixedPrec::{FPInfinite, FPNumber};
 
 
 #[test]

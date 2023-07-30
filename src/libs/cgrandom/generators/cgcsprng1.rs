@@ -1,7 +1,7 @@
 use crypto::digest::Digest;
 use crypto::sha3::Sha3;
 
-use crate::cgrandom::generators::generator::{RngBase, RngSkippable};
+use crate::libs::cgrandom::generators::generator::{RngBase, RngSkippable};
 
 pub struct CgCsPrng1 {
   pub seed: [u8; 64],

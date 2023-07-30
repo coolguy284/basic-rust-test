@@ -1,6 +1,6 @@
 use std::num::Wrapping;
 
-use crate::cgrandom::generators::generator::{RngBase, RngSkippable};
+use crate::libs::cgrandom::generators::generator::{RngBase, RngSkippable};
 
 pub struct FourGenerator8;
 
