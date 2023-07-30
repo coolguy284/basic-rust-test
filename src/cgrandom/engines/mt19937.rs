@@ -14,6 +14,8 @@ fn lowest_n_bits_of<T: Shl<usize> + BitAnd<<<T as Shl<usize>>::Output as Sub<T>>
   }
 }
 
+// https://en.wikipedia.org/wiki/Mersenne_Twister for constants and instance vars
+
 const MT19937_32_W: Wrapping<u32> = Wrapping(32u32);
 const MT19937_32_N: Wrapping<u32> = Wrapping(624u32);
 const MT19937_32_M: Wrapping<u32> = Wrapping(397u32);
@@ -95,6 +97,8 @@ impl Mt19937_32 {
     self.mt_index = Wrapping(0u32);
   }
 }
+
+// https://en.wikipedia.org/wiki/Mersenne_Twister for constants and instance vars
 
 const MT19937_64_W: Wrapping<u64> = Wrapping(64u64);
 const MT19937_64_N: Wrapping<u64> = Wrapping(312u64);
