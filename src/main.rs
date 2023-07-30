@@ -12,10 +12,10 @@ use chrono_tz::{OffsetName, Tz};
 use iana_time_zone::get_timezone;
 use hex::{FromHex, ToHex};
 
-use cgrandom::engines::cgcsprng1::CgCsPrng1;
-use cgrandom::engines::engine::{RngEngine, RngSkippable};
-use cgrandom::engines::mt19937::{Mt19937_32, Mt19937_64};
-use cgrandom::engines::non_random::{CounterGenerator8, FourGenerator8};
+use cgrandom::generators::cgcsprng1::CgCsPrng1;
+use cgrandom::generators::generator::{RngBase, RngSkippable};
+use cgrandom::generators::mt19937::{Mt19937_32, Mt19937_64};
+use cgrandom::generators::non_random::{CounterGenerator8, FourGenerator8};
 #[cfg(debug_assertions)]
 use debug_funcs::print_type_of;
 use time_lib::{advanced_sleep, FixedPrec};

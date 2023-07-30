@@ -1,4 +1,4 @@
-pub trait RngEngine {
+pub trait RngBase {
   type RngOutputType;
   
   fn new() -> Self;
@@ -8,7 +8,7 @@ pub trait RngEngine {
   fn generate(&mut self) -> Self::RngOutputType;
 }
 
-pub trait RngSkippable: RngEngine {
+pub trait RngSkippable: RngBase {
   type RngSkipType;
   
   fn skip(&mut self, count: Self::RngSkipType);

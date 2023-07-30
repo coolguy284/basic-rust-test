@@ -1,12 +1,13 @@
 active items:
-rename engines to generators
 remove apparently unnecessary unwraps
 move main.rs stuff info subfolders
-add cgcsprng2, well512a and 3 others (using reference implementation and thus requiring adding of a legal section to this program), xorshift128+, xoroshiro256++
-add null cache, byte cache, bit cache
+convert compiled in hex calls to hex!
 add state export functions to rngengine trait
 make tests into folder hierarchy with a cgrandom folder, then generators folder inside, so that cache can be tested seperately
 convert panics into errors, even in main func (it manually sets a nonzero status code instead)
+remove rust-crypto depenency, replace with sha3
+add cgcsprng2, well512a and 3 others (using reference implementation and thus requiring adding of a legal section to this program), xorshift128+, xoroshiro256++
+add null cache, byte cache, bit cache
 add assembly trng rdrand rdseed (https://www.intel.com/content/www/us/en/developer/articles/guide/intel-digital-random-number-generator-drng-software-implementation-guide.html, https://doc.rust-lang.org/reference/inline-assembly.html)
 move off main function prints to seperate module, move all libraries into lib, then do the tests folder sorting:
   split main code into parser that produces an enum and runner that takes in the enum; parser code can then be tested; potentially can also test actual output of command by making output a string and then checking for equality
@@ -14,6 +15,5 @@ add resource allocate subcommand
 
 low priority:
 reconcile the 2 inexplicably different types in the current_time subcommand
-remove rust-crypto depenency, replace with crypto or sha3
 improve argument handling of main.rs as seed isnt needed sometimes (make seed be nullable value and check for its existence when necessary)
 make sleep function call Sleep(INFINITE) function on windows (https://github.com/microsoft/windows-rs)

@@ -4,7 +4,7 @@ use std::ops::{BitAnd, Shl, Sub};
 
 use num_traits::One;
 
-use crate::cgrandom::engines::engine::RngEngine;
+use crate::cgrandom::generators::generator::RngBase;
 
 fn lowest_n_bits_of<T: Shl<usize> + BitAnd<<<T as Shl<usize>>::Output as Sub<T>>::Output, Output = T> + One>(num: T, n_bits: usize) -> T where <T as Shl<usize>>::Output: Sub<T> {
   if n_bits >= (size_of::<T>() * 8usize) {
@@ -38,7 +38,7 @@ pub struct Mt19937_32 {
   pub mt_index: Wrapping<u32>,
 }
 
-impl RngEngine for Mt19937_32 {
+impl RngBase for Mt19937_32 {
   type RngOutputType = u32;
   
   fn new() -> Mt19937_32 {
@@ -122,7 +122,7 @@ pub struct Mt19937_64 {
   pub mt_index: Wrapping<u64>,
 }
 
-impl RngEngine for Mt19937_64 {
+impl RngBase for Mt19937_64 {
   type RngOutputType = u64;
   
   fn new() -> Mt19937_64 {

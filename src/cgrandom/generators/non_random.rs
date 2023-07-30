@@ -1,10 +1,10 @@
 use std::num::Wrapping;
 
-use crate::cgrandom::engines::engine::{RngEngine, RngSkippable};
+use crate::cgrandom::generators::generator::{RngBase, RngSkippable};
 
 pub struct FourGenerator8;
 
-impl RngEngine for FourGenerator8 {
+impl RngBase for FourGenerator8 {
   type RngOutputType = u8;
   
   fn new() -> FourGenerator8 {
@@ -22,7 +22,7 @@ pub struct CounterGenerator8 {
   pub cg_index: Wrapping<u8>,
 }
 
-impl RngEngine for CounterGenerator8 {
+impl RngBase for CounterGenerator8 {
   type RngOutputType = u8;
   
   fn new() -> CounterGenerator8 {

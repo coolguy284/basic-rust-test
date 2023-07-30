@@ -1,7 +1,7 @@
 use crypto::digest::Digest;
 use crypto::sha3::Sha3;
 
-use crate::cgrandom::engines::engine::{RngEngine, RngSkippable};
+use crate::cgrandom::generators::generator::{RngBase, RngSkippable};
 
 pub struct CgCsPrng1 {
   pub seed: [u8; 64],
@@ -9,7 +9,7 @@ pub struct CgCsPrng1 {
   pub counter: [u128; 4],
 }
 
-impl RngEngine for CgCsPrng1 {
+impl RngBase for CgCsPrng1 {
   type RngOutputType = [u8; 64];
   
   fn new() -> CgCsPrng1 {
@@ -79,7 +79,7 @@ impl CgCsPrng1 {
     output[15] = (input & 0xffu128) as u8;
   }
   
-  pub fn set_modifier(&mut self, modifier: <CgCsPrng1 as RngEngine>::RngOutputType) {
+  pub fn set_modifier(&mut self, modifier: <CgCsPrng1 as RngBase>::RngOutputType) {
     self.modifier.clone_from_slice(&modifier[..]);
   }
   
