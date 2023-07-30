@@ -1,8 +1,8 @@
 active items:
-move main.rs stuff info subfolders
 remove apparently unnecessary unwraps
-add state export functions to rngengine trait
+move main.rs stuff into subfolders
 convert panics into errors, even in main func (it manually sets a nonzero status code instead)
+add state export functions to rngengine trait
 add cgcsprng2, well512a and 3 others (using reference implementation and thus requiring adding of a legal section to this program), xorshift128+, xoroshiro256++
 add null cache, byte cache, bit cache
 add assembly trng rdrand rdseed (https://www.intel.com/content/www/us/en/developer/articles/guide/intel-digital-random-number-generator-drng-software-implementation-guide.html, https://doc.rust-lang.org/reference/inline-assembly.html)
