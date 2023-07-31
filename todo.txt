@@ -1,14 +1,18 @@
 active items:
-remove apparently unnecessary unwraps
 move main.rs stuff into subfolders
 convert panics into errors, even in main func (it manually sets a nonzero status code instead)
+if current_time command errors getting the timezone, just don't show timezone data (so properly handling errors)
 add state export functions to rngengine trait
+accept integer for seed if it doesn't require a bigint
 add cgcsprng2, well512a and 3 others (using reference implementation and thus requiring adding of a legal section to this program), xorshift128+, xoroshiro256++
 add null cache, byte cache, bit cache
 add assembly trng rdrand rdseed (https://www.intel.com/content/www/us/en/developer/articles/guide/intel-digital-random-number-generator-drng-software-implementation-guide.html, https://doc.rust-lang.org/reference/inline-assembly.html)
 move off main function prints to seperate module, then do the tests folder sorting:
   split main code into parser that produces an enum and runner that takes in the enum; parser code can then be tested; potentially can also test actual output of command by making output a string and then checking for equality
-add resource allocate subcommand
+subcommands:
+  resource allocate
+  fs operations
+  language parser / calculator using bigints and any other type
 
 low priority:
 reconcile the 2 inexplicably different types in the current_time subcommand

@@ -46,15 +46,15 @@ fn main() {
         let now_local: DateTime<Local> = DateTime::from(now_utc);
         
         // i don't even know bro https://stackoverflow.com/questions/59603665/how-do-you-find-the-local-timezone-offset-in-rust/59603899#59603899
-        let local_pre_fixed_offset = Local.timestamp_opt(0, 0).single().unwrap();
+        let local_pre_fixed_offset = Local.timestamp_opt(0, 0).single().expect("Internal error getting timezone");
         let local_fixed_offset = local_pre_fixed_offset.offset();
         let local_offset_secs = local_fixed_offset.fix().local_minus_utc();
         
         let local_offset_secs_is_positive = local_offset_secs >= 0;
         let local_offset_secs_absolute = local_offset_secs.abs();
         
-        let local_tz_str = get_timezone().unwrap();
-        let local_tz: Tz = local_tz_str.parse().unwrap();
+        let local_tz_str = get_timezone().expect("Error getting timezone");
+        let local_tz: Tz = local_tz_str.parse().expect("Timezone not in list of timezones");
         let local_utc_offset = local_tz.offset_from_utc_date(&now_utc.date_naive());
         let local_tz_abbreviation = local_utc_offset.abbreviation();
         
@@ -106,7 +106,7 @@ fn main() {
           let rng_skip_count;
           match rng_skip_count_str_option {
             Some(x) => {
-              rng_skip_count = x.parse::<u64>().unwrap();
+              rng_skip_count = x.parse::<u64>().expect("--skip not a valid number");
             },
             None => {
               rng_skip_count = 0;
@@ -116,7 +116,7 @@ fn main() {
           let rng_count;
           match rng_count_str_option {
             Some(x) => {
-              rng_count = x.parse::<u64>().unwrap();
+              rng_count = x.parse::<u64>().expect("--count not a valid number");
             },
             None => {
               rng_count = 10;
