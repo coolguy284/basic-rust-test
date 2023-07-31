@@ -1,7 +1,5 @@
 active items:
-finish moving main.rs stuff into modules
 convert panics into errors, even in main func (it manually sets a nonzero status code instead)
-if current_time command errors getting the timezone, just don't show timezone data (so properly handling errors)
 add state export functions to rngengine trait
 accept integer for seed if it doesn't require a bigint
 add cgcsprng2, well512a and 3 others (using reference implementation and thus requiring adding of a legal section to this program), xorshift128+, xoroshiro256++
@@ -14,7 +12,11 @@ reconcile the 2 inexplicably different types in the current_time subcommand
 improve argument handling of main.rs as seed isnt needed sometimes (make seed be nullable value and check for its existence when necessary)
 make sleep function call Sleep(INFINITE) function on windows (https://github.com/microsoft/windows-rs)
 figure out how to move cgrandom into a library crate
+if current_time command errors getting the timezone, just don't show timezone data (so properly handling errors)
 error on extra arguments always
+add extern crate lines to modules
+add linting for required int type hints, required extern crates
+add output format option for hex output rngs to show as comma seperated u8 array instead
 
 long term items:
 subcommands:
@@ -24,6 +26,8 @@ subcommands:
   null command
   command to error with a given error code
   cat command, but also accepting base64 input argument in addition to regular
+debug subcommands:
+  delayed print (prints 1 thru 10 with a 1 second delay between each)
 
 keep in mind:
 if other tests for cgrandom are added other than the generators, then move current cgrandom tests into generators subfolder
