@@ -1,6 +1,5 @@
 active items:
 convert panics into errors, even in main func (it manually sets a nonzero status code instead)
-make let followed match statements use return value from match
 add state export functions to rngengine trait
 accept integer for seed if it doesn't require a bigint
 add cgcsprng2, well512a and 3 others (using reference implementation and thus requiring adding of a legal section to this program), xorshift128+, xoroshiro256++
