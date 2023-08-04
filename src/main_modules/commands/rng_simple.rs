@@ -15,25 +15,15 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
     let rng_name = subcommand_argv.get("rng").and_then(|v| v.last()).expect("--rng not specified");
     let rng_seed_hex_string = subcommand_argv.get("seed-hex").and_then(|v| v.last()).expect("--seed-hex not specified");
     let rng_skip_count_str_option = subcommand_argv.get("skip").and_then(|v| v.last());
-    let rng_skip_count;
-    match rng_skip_count_str_option {
-      Some(x) => {
-        rng_skip_count = x.parse::<u64>().expect("--skip not a valid number");
-      },
-      None => {
-        rng_skip_count = 0;
-      },
-    }
+    let rng_skip_count = match rng_skip_count_str_option {
+      Some(x) => x.parse::<u64>().expect("--skip not a valid number"),
+      None => 0,
+    };
     let rng_count_str_option = subcommand_argv.get("count").and_then(|v| v.last());
-    let rng_count;
-    match rng_count_str_option {
-      Some(x) => {
-        rng_count = x.parse::<u64>().expect("--count not a valid number");
-      },
-      None => {
-        rng_count = 10;
-      },
-    }
+    let rng_count = match rng_count_str_option {
+      Some(x) => x.parse::<u64>().expect("--count not a valid number"),
+      None => 10,
+    };
     
     match rng_name.as_str() {
       "fourgenerator" => {
@@ -150,18 +140,15 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
         
         let rng_modifier_hex_string_option = subcommand_argv.get("modifier-hex").and_then(|v| v.last());
         
-        let rng_modifier;
-        match rng_modifier_hex_string_option {
+        let rng_modifier = match rng_modifier_hex_string_option {
           Some(x) => {
             if x.len() != 128 {
               panic!("--modifier-hex length of {} is invalid, must be 128 chars", x.len());
             }
             
-            rng_modifier = <[u8; 64]>::from_hex(x).expect("--modifier-hex is invalid hex");
+            <[u8; 64]>::from_hex(x).expect("--modifier-hex is invalid hex")
           },
-          None => {
-            rng_modifier = [0u8; 64];
-          },
+          None => [0u8; 64],
         }
         
         println!("Modifier: {}", rng_modifier.encode_hex::<String>());

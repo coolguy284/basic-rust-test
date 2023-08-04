@@ -1,5 +1,6 @@
 active items:
 convert panics into errors, even in main func (it manually sets a nonzero status code instead)
+make let followed match statements use return value from match
 add state export functions to rngengine trait
 accept integer for seed if it doesn't require a bigint
 add cgcsprng2, well512a and 3 others (using reference implementation and thus requiring adding of a legal section to this program), xorshift128+, xoroshiro256++
@@ -26,6 +27,7 @@ subcommands:
   null command
   command to error with a given error code
   cat command, but also accepting base64 input argument in addition to regular
+  simple web server that is http and just returns a 200 text/plain; charset=utf-8 with contents 'Simple Test Server\nCurrent Date is <ISO Date Format>'
 debug subcommands:
   delayed print (prints 1 thru 10 with a 1 second delay between each)
 

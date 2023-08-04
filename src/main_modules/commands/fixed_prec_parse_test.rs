@@ -12,15 +12,10 @@ pub fn command_fixed_prec_parse_test(cmd_line_args: Vec<String>) {
     
     let fractional_digits_option = subcommand_argv.get("fractional-digits").and_then(|v| v.last());
     
-    let fractional_digits;
-    match fractional_digits_option {
-      Some(x) => {
-        fractional_digits = x.parse::<u8>().expect("--fractional-digits invalid");
-      },
-      None => {
-        fractional_digits = 9;
-      },
-    }
+    let fractional_digits = match fractional_digits_option {
+      Some(x) => x.parse::<u8>().expect("--fractional-digits invalid"),
+      None => 9,
+    };
     
     println!("Input numerical string: \"{}\"", num_str);
     println!();
