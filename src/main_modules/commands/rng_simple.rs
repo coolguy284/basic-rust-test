@@ -149,7 +149,7 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
             <[u8; 64]>::from_hex(x).expect("--modifier-hex is invalid hex")
           },
           None => [0u8; 64],
-        }
+        };
         
         println!("Modifier: {}", rng_modifier.encode_hex::<String>());
         println!();
