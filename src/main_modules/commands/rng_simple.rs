@@ -4,24 +4,27 @@ use crate::libs::cgrandom::generators::cgcsprng1::CgCsPrng1;
 use crate::libs::cgrandom::generators::generator::{RngBase, RngSkippable};
 use crate::libs::cgrandom::generators::mt19937::{Mt19937_32, Mt19937_64};
 use crate::libs::cgrandom::generators::non_random::{CounterGenerator8, FourGenerator8};
+use crate::libs::unwrap_macros::{unwrap_option_else_return_error, unwrap_result_else_return_error};
 use crate::main_modules::large_prints::large_print_rng_simple;
+use crate::main_modules::errors::CommandError;
+use crate::main_modules::errors::CommandError::{ArgInvalidHexError, ArgInvalidNumberError, ArgNotSpecifiedError};
 
-pub fn command_rng_simple(cmd_line_args: Vec<String>) {
+pub fn command_rng_simple(cmd_line_args: Vec<String>) -> Result<(), CommandError> {
   if cmd_line_args.len() == 1 {
     large_print_rng_simple();
   } else {
     let (_subcommand_args, subcommand_argv) = argmap::parse(cmd_line_args.iter().skip(1).collect::<Vec<_>>().iter());
     
-    let rng_name = subcommand_argv.get("rng").and_then(|v| v.last()).expect("--rng not specified");
-    let rng_seed_hex_string = subcommand_argv.get("seed-hex").and_then(|v| v.last()).expect("--seed-hex not specified");
+    let rng_name = unwrap_option_else_return_error!(subcommand_argv.get("rng").and_then(|v| v.last()), ArgNotSpecifiedError("--rng not specified".to_string()));
+    let rng_seed_hex_string = unwrap_option_else_return_error!(subcommand_argv.get("seed-hex").and_then(|v| v.last()), ArgNotSpecifiedError("--seed-hex not specified".to_string()));
     let rng_skip_count_str_option = subcommand_argv.get("skip").and_then(|v| v.last());
     let rng_skip_count = match rng_skip_count_str_option {
-      Some(x) => x.parse::<u64>().expect("--skip not a valid number"),
+      Some(x) => unwrap_result_else_return_error!(x.parse::<u64>(), ArgInvalidNumberError("--skip not a valid number".to_string())),
       None => 0,
     };
     let rng_count_str_option = subcommand_argv.get("count").and_then(|v| v.last());
     let rng_count = match rng_count_str_option {
-      Some(x) => x.parse::<u64>().expect("--count not a valid number"),
+      Some(x) => unwrap_result_else_return_error!(x.parse::<u64>(), ArgInvalidNumberError("--count not a valid number".to_string())),
       None => 10,
     };
     
@@ -43,7 +46,7 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
         println!("Random Number Generator: {}", rng_name);
         println!();
         
-        let rng_seed = u8::from_str_radix(rng_seed_hex_string, 16).expect("--seed-hex not a valid hex value");
+        let rng_seed = unwrap_result_else_return_error!(u8::from_str_radix(rng_seed_hex_string, 16), ArgInvalidHexError("--seed-hex not a valid hex value".to_string()));
         
         println!("Seed: {}", rng_seed);
         println!();
@@ -71,7 +74,7 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
         println!("Random Number Generator: {}", rng_name);
         println!();
         
-        let rng_seed = u32::from_str_radix(rng_seed_hex_string, 16).expect("--seed-hex not a valid hex value");
+        let rng_seed = unwrap_result_else_return_error!(u32::from_str_radix(rng_seed_hex_string, 16), ArgInvalidHexError("--seed-hex not a valid hex value".to_string()));
         
         println!("Seed: {}", rng_seed);
         println!();
@@ -100,7 +103,7 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
         println!("Random Number Generator: {}", rng_name);
         println!();
         
-        let rng_seed = u64::from_str_radix(rng_seed_hex_string, 16).expect("--seed-hex not a valid hex value");
+        let rng_seed = unwrap_result_else_return_error!(u64::from_str_radix(rng_seed_hex_string, 16), ArgInvalidHexError("--seed-hex not a valid hex value".to_string()));
         
         println!("Seed: {}", rng_seed);
         println!();
@@ -133,7 +136,7 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
           panic!("--seed-hex length of {} is invalid, must be 128 chars", rng_seed_hex_string.len());
         }
         
-        let rng_seed = <[u8; 64]>::from_hex(rng_seed_hex_string).expect("--seed-hex is invalid hex");
+        let rng_seed = unwrap_result_else_return_error!(<[u8; 64]>::from_hex(rng_seed_hex_string), ArgInvalidHexError("--seed-hex is invalid hex".to_string()));
         
         println!("Seed: {}", rng_seed.encode_hex::<String>());
         println!();
@@ -146,7 +149,7 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
               panic!("--modifier-hex length of {} is invalid, must be 128 chars", x.len());
             }
             
-            <[u8; 64]>::from_hex(x).expect("--modifier-hex is invalid hex")
+            unwrap_result_else_return_error!(<[u8; 64]>::from_hex(x), ArgInvalidHexError("--modifier-hex is invalid hex".to_string()))
           },
           None => [0u8; 64],
         };
@@ -178,4 +181,6 @@ pub fn command_rng_simple(cmd_line_args: Vec<String>) {
       },
     }
   }
+  
+  Ok(())
 }

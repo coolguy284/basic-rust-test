@@ -1,10 +1,12 @@
 active items:
-convert panics into errors, even in main func (it manually sets a nonzero status code instead)
+replace macro with .ok_or_else()
+manually format error messages instead of auto returning and debug formatting (should also print in red color the word "error:" like cargo run; should also manually set error code of 1), and remove some #derives as a result
+add tests for each error condition of time_fixed_prec
 add state export functions to rngengine trait
 accept integer for seed if it doesn't require a bigint
 add cgcsprng2, well512a and 3 others (using reference implementation and thus requiring adding of a legal section to this program), xorshift128+, xoroshiro256++
 add null cache, byte cache, bit cache
-add assembly trng rdrand rdseed (https://www.intel.com/content/www/us/en/developer/articles/guide/intel-digital-random-number-generator-drng-software-implementation-guide.html, https://doc.rust-lang.org/reference/inline-assembly.html)
+add assembly trng based on rdrand or rdseed (https://www.intel.com/content/www/us/en/developer/articles/guide/intel-digital-random-number-generator-drng-software-implementation-guide.html, https://doc.rust-lang.org/reference/inline-assembly.html)
 split main code into parser that produces an enum and runner that takes in the enum; parser code can then be tested (in a seperate subfolder in test); potentially can also test actual output of command by making output a string and then checking for equality
 
 low priority:
@@ -17,6 +19,7 @@ error on extra arguments always
 add extern crate lines to modules
 add linting for required int type hints, required extern crates
 add output format option for hex output rngs to show as comma seperated u8 array instead
+reduce visibility of pubs to minimum valid visibility
 
 long term items:
 subcommands:
@@ -27,6 +30,7 @@ subcommands:
   command to error with a given error code
   cat command, but also accepting base64 input argument in addition to regular
   simple web server that is http and just returns a 200 text/plain; charset=utf-8 with contents 'Simple Test Server\nCurrent Date is <ISO Date Format>'
+  curl-esque command
 debug subcommands:
   delayed print (prints 1 thru 10 with a 1 second delay between each)
 
