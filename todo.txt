@@ -31,6 +31,12 @@ subcommands:
   cat command, but also accepting base64 input argument in addition to regular
   simple web server that is http and just returns a 200 text/plain; charset=utf-8 with contents 'Simple Test Server\nCurrent Date is <ISO Date Format>'
   curl-esque command
+  date command
+    parse date
+    get day of week
+    get difference between 2 datetimes
+    support for gregorian, julian, others, including leap seconds and relativistic corrections
+    add command to convert between calendar formats and absolute time (a special value that includes leap seconds), convert from that to unix epoch or ms epoch or google time, then on top of that apply a calendar system like julian or gregorian or islamic or something
 debug subcommands:
   delayed print (prints 1 thru 10 with a 1 second delay between each)
 
