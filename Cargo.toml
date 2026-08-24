@@ -11,12 +11,12 @@ global-min-publish-age = "7 days"
 [dependencies]
 argmap = '1.1.2'
 chrono = "0.4.45"
-chrono-tz = "0.8.6"
+chrono-tz = "0.10.4"
 hex = '0.4.3'
-hex-literal = '0.4.1'
+hex-literal = "1.1.0"
 iana-time-zone = "0.1.65"
 num-traits = "0.2.19"
-sha3 = "0.10.9"
+sha3 = "0.12.0"
 substring = '1.4.5'
 
 [profile.release]
