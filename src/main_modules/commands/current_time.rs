@@ -43,13 +43,30 @@ pub fn command_current_time() -> Result<(), CommandCurrentTimeError> {
   println!("Current time, written in many ways:");
   println!();
   println!("Human readable:");
-  println!("  Current Local time is {} {:?}", now_local.format("%A, %B %d, %Y, %I:%M:%S.%9f %p %z"), local_tz_abbreviation);
+  println!(
+    "  Current Local time is {}{}",
+    now_local.format("%A, %B %d, %Y, %I:%M:%S.%9f %p %z"),
+    match local_tz_abbreviation {
+      Some(abbreviation) => format!(" {abbreviation}"),
+      None => "".to_owned(),
+    },
+  );
   println!("  Current UTC time is   {}", now_utc.format("%A, %B %d, %Y, %I:%M:%S.%9f %p %z %Z"));
   println!();
   println!("Technical:");
   println!("  Current Local time is {}", now_local.format("%Y-%m-%dT%H:%M:%S.%9f"));
   println!("  Current UTC time is   {}", now_utc.format("%Y-%m-%dT%H:%M:%S.%9fZ"));
-  println!("  Local time offset is  {}{}:{:0>2} ({:?}, {})", if local_offset_secs_is_positive { "" } else { "-" }, local_offset_secs_absolute / 3600, local_offset_secs_absolute / 60 % 60, local_tz_abbreviation, local_tz_str);
+  println!(
+    "  Local time offset is  {}{}:{:0>2} ({}{})",
+    if local_offset_secs_is_positive { "" } else { "-" },
+    local_offset_secs_absolute / 3600,
+    local_offset_secs_absolute / 60 % 60,
+    match local_tz_abbreviation {
+      Some(abbreviation) => format!("{abbreviation}, "),
+      None => "".to_owned(),
+    },
+    local_tz_str,
+  );
   
   Ok(())
 }
