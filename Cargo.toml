@@ -3,9 +3,6 @@ name = 'basic-rust-test'
 version = '1.1.2'
 edition = '2021'
 
-[registry]
-global-min-publish-age = "7 days"
-
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
